@@ -1,0 +1,67 @@
+
+services:
+  front:
+    build:
+      context: ../frontend/
+      target: prod
+    ports:
+      - 3000:3000
+    networks:
+      - prod
+
+  back:
+    build:
+      context: ../backend/
+      target: prod
+    depends_on:
+      - db
+      - mosquitto
+      - migrate
+    environment:
+      - BROKER_URL=mqtt://mosquitto:1883
+      - DATABASE_URL=postgresql://verdant:verdant2025@db:5432/verdant_db
+      - ACCESS_JWT_SECRET="verdant-secret"
+      - REFRESH_JWT_SECRET="another-verdant-secret"
+      - NODE_ENV=production
+    ports:
+      - 8000:8000
+    networks:
+      - prod
+
+  migrate:
+    build:
+      context: ../backend/
+      target: migrate
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://verdant:verdant2025@db:5432/verdant_db
+    networks:
+      - prod
+
+  mosquitto:
+    image: eclipse-mosquitto:2.0.21
+    volumes:
+      - ./data/mosquitto/data:/mosquitto/data
+      - ./data/mosquitto/config/:/mosquitto/config
+    networks:
+      - prod
+    ports:
+      - 1883:1883
+
+  db:
+    image: postgres:latest
+    container_name: db
+    volumes:
+      - ./data/postgresql/:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: verdant_db
+      POSTGRES_USER: verdant
+      POSTGRES_PASSWORD: verdant2025
+    ports:
+      - "5432:5432"
+    networks:
+        - prod
+    # restart: unless-stopped
+networks:
+  prod:
