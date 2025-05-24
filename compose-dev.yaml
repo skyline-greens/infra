@@ -1,0 +1,59 @@
+
+services:
+  front:
+    build:
+      context: ../frontend/
+      target: dev
+    volumes:
+      - ../frontend/:/app
+    ports:
+      - 3000:3000
+    networks:
+      - dev
+
+  back:
+    build:
+      context: ../backend/
+      target: dev
+    depends_on:
+      - db
+      - mosquitto
+    environment:
+      - BROKER_URL=mqtt://mosquitto:1883
+      - DATABASE_URL=postgresql://verdant:verdant2025@db:5432/verdant_db
+      - ACCESS_JWT_SECRET="verdant-secret"
+      - REFRESH_JWT_SECRET="another-verdant-secret"
+      - NODE_ENV=development
+    volumes:
+      - ../backend/:/app
+    ports:
+      - 8000:8000
+    networks:
+      - dev
+
+  mosquitto:
+    image: eclipse-mosquitto:2.0.21
+    volumes:
+      - ./data/mosquitto/data:/mosquitto/data
+      - ./data/mosquitto/config/:/mosquitto/config
+    networks:
+      - dev
+    ports:
+      - 1883:1883
+
+  db:
+    image: postgres:latest
+    container_name: db
+    volumes:
+      - ./data/postgresql/:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: verdant_db
+      POSTGRES_USER: verdant
+      POSTGRES_PASSWORD: verdant2025
+    ports:
+      - "5432:5432"
+    networks:
+        - dev
+    # restart: unless-stopped
+networks:
+  dev:
