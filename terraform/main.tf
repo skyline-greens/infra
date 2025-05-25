@@ -15,7 +15,7 @@ resource "azurerm_virtual_network" "verdant-vnet" {
 resource "azurerm_subnet" "verdant-prod-subnet" {
     name                 = "${var.prod_vnet}-cluster"
     resource_group_name  = azurerm_resource_group.verdant-prod.name
-    address_prefixes     = ["10.0.0.0/24"]
+    address_prefixes     = ["10.0.1.0/24"]
     virtual_network_name = azurerm_virtual_network.verdant-vnet.name
 }
 
@@ -29,9 +29,10 @@ resource "azurerm_kubernetes_cluster" "verdant" {
     default_node_pool {
         name           = "verdant"
         vm_size        = "Standard_A2_v2"
+        node_count = 1
         min_count      = 1
         max_count      = 2
-        vnet_subnet_id = azurerm_subnet.verdant-prod-subnet.id
+        auto_scaling_enabled = true
     }
 
     identity {

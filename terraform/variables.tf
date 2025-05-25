@@ -22,3 +22,9 @@ variable "verdant_location" {
   type        = string
   default     = "francecentral"
 }
+
+variable "eventgrid_namespace" {
+    description = "name of the namespcase for eventgrid"
+    type = string
+    default = "verdant-broker"
+}
