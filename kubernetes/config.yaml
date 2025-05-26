@@ -1,0 +1,25 @@
+---
+# ConfigMap for non-sensitive configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  BROKER_URL: "mqtts://verdant.francecentral-1.ts.eventgrid.azure.net:8883"
+  DATABASE_URL: "postgresql://verdant:verdant2025@db:5432/verdant_db"
+  NODE_ENV: "production"
+  POSTGRES_DB: "verdant_db"
+  POSTGRES_USER: "verdant"
+
+---
+# Secret for sensitive data
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secrets
+type: Opaque
+data:
+  ACCESS_JWT_SECRET: dmVyZGFudC1zZWNyZXQ=  # base64 encoded "verdant-secret"
+  REFRESH_JWT_SECRET: YW5vdGhlci12ZXJkYW50LXNlY3JldA==  # base64 encoded "another-verdant-secret"
+  POSTGRES_PASSWORD: dmVyZGFudDIwMjU=  # base64 encoded "verdant2025"
+

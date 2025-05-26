@@ -2,7 +2,7 @@
 services:
   front:
     build:
-      context: ../frontend/
+      context: ../../frontend/
       target: prod
     ports:
       - 3000:3000
@@ -11,14 +11,14 @@ services:
 
   back:
     build:
-      context: ../backend/
+      context: ../../backend/
       target: prod
     depends_on:
       - db
       - mosquitto
       - migrate
     environment:
-      - BROKER_URL=mqtt://mosquitto:1883
+      - BROKER_URL=mqtts://verdant.francecentral-1.ts.eventgrid.azure.net
       - DATABASE_URL=postgresql://verdant:verdant2025@db:5432/verdant_db
       - ACCESS_JWT_SECRET="verdant-secret"
       - REFRESH_JWT_SECRET="another-verdant-secret"
@@ -30,7 +30,7 @@ services:
 
   migrate:
     build:
-      context: ../backend/
+      context: ../../backend/
       target: migrate
     depends_on:
       - db

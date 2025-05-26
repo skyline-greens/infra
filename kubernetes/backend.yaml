@@ -3,9 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
-  namespace: verdant
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: backend
@@ -74,13 +73,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend
-  namespace: verdant
+  name: backend-service
 spec:
   selector:
     app: backend
   ports:
-  - port: 8000
+  - protocol: TCP
+    port: 80
     targetPort: 8000
   type: ClusterIP
 

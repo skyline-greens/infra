@@ -28,3 +28,15 @@ variable "eventgrid_namespace" {
     type = string
     default = "verdant-broker"
 }
+
+variable "loadbalancer_name" {
+    description = "name of the kubernetes load balancer"
+    type = string
+    default = "verdant-loadbalancer"
+}
+
+variable "ingress_namespace" {
+    description = "name of the namespace for ingress resources"
+    type = string
+    default = "ingress"
+}

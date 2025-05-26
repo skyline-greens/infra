@@ -1,31 +1,4 @@
 ---
-# ConfigMap for non-sensitive configuration
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: app-config
-  namespace: verdant
-data:
-  BROKER_URL: "mqtt://mosquitto:1883"
-  DATABASE_URL: "postgresql://verdant:verdant2025@db:5432/verdant_db"
-  NODE_ENV: "production"
-  POSTGRES_DB: "verdant_db"
-  POSTGRES_USER: "verdant"
-
----
-# Secret for sensitive data
-apiVersion: v1
-kind: Secret
-metadata:
-  name: app-secrets
-  namespace: verdant
-type: Opaque
-data:
-  ACCESS_JWT_SECRET: dmVyZGFudC1zZWNyZXQ=  # base64 encoded "verdant-secret"
-  REFRESH_JWT_SECRET: YW5vdGhlci12ZXJkYW50LXNlY3JldA==  # base64 encoded "another-verdant-secret"
-  POSTGRES_PASSWORD: dmVyZGFudDIwMjU=  # base64 encoded "verdant2025"
-
----
 # PersistentVolume for PostgreSQL
 apiVersion: v1
 kind: PersistentVolume
@@ -47,7 +20,6 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgres-pvc
-  namespace: verdant
 spec:
   accessModes:
     - ReadWriteOnce
@@ -62,7 +34,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: db
-  namespace: verdant
 spec:
   replicas: 1
   selector:
@@ -115,7 +86,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: db
-  namespace: verdant
 spec:
   selector:
     app: db
