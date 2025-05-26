@@ -2,10 +2,10 @@
 services:
   front:
     build:
-      context: ../frontend/
+      context: ../../frontend/
       target: dev
     volumes:
-      - ../frontend/:/app
+      - ../../frontend/:/app
     ports:
       - 3000:3000
     networks:
@@ -13,7 +13,7 @@ services:
 
   back:
     build:
-      context: ../backend/
+      context: ../../backend/
       target: dev
     depends_on:
       - db
@@ -27,7 +27,7 @@ services:
       - MQTT_USERNAME=backend
       - MQTT_ID_PREFIX=backend-dev
     volumes:
-      - ../backend/:/app
+      - ../../backend/:/app
     ports:
       - 8000:8000
     networks:
