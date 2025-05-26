@@ -24,6 +24,8 @@ services:
       - ACCESS_JWT_SECRET="verdant-secret"
       - REFRESH_JWT_SECRET="another-verdant-secret"
       - NODE_ENV=development
+      - MQTT_USERNAME=backend
+      - MQTT_ID_PREFIX=backend-dev
     volumes:
       - ../backend/:/app
     ports:

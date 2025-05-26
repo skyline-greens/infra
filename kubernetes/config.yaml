@@ -10,6 +10,8 @@ data:
   NODE_ENV: "production"
   POSTGRES_DB: "verdant_db"
   POSTGRES_USER: "verdant"
+  MQTT_USERNAME: "backend"
+  MQTT_ID_PREFIX: backend-cloud
 
 ---
 # Secret for sensitive data

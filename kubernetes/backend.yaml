@@ -19,7 +19,7 @@ spec:
         command: ['sh', '-c', 'until pg_isready -h db -p 5432; do echo waiting for database; sleep 2; done;']
       containers:
       - name: backend
-        image: ymerzouka/verdant-backend:latest # Replace with your actual image
+        image: ymerzouka/verdant-backend:latest
         ports:
         - containerPort: 8000
         env:
@@ -48,6 +48,19 @@ spec:
             secretKeyRef:
               name: app-secrets
               key: REFRESH_JWT_SECRET
+
+        - name: MQTT_ID_PREFIX
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: MQTT_ID_PREFIX
+
+        - name: MQTT_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: MQTT_USERNAME
+
         resources:
           requests:
             memory: "256Mi"

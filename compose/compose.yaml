@@ -1,18 +1,14 @@
 
 services:
   front:
-    build:
-      context: ../../frontend/
-      target: prod
+    image: ymerzouka/verdant-frontend:latest
     ports:
       - 3000:3000
     networks:
       - prod
 
   back:
-    build:
-      context: ../../backend/
-      target: prod
+    image: ymerzouka/verdant-backend:latest
     depends_on:
       - db
       - mosquitto
@@ -23,15 +19,15 @@ services:
       - ACCESS_JWT_SECRET="verdant-secret"
       - REFRESH_JWT_SECRET="another-verdant-secret"
       - NODE_ENV=production
+      - MQTT_USERNAME=backend
+      - MQTT_ID_PREFIX=backend-prod
     ports:
       - 8000:8000
     networks:
       - prod
 
   migrate:
-    build:
-      context: ../../backend/
-      target: migrate
+    image: ymerzouka/verdant-backend:latest
     depends_on:
       - db
     environment:
