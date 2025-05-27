@@ -8,6 +8,9 @@ services:
       - ../../frontend/:/app
     ports:
       - 3000:3000
+    environment:
+      - BACKEND_URL=http://back:8000/api
+      - ACCESS_JWT_SECRET="verdant-secret"
     networks:
       - dev
 
@@ -17,9 +20,8 @@ services:
       target: dev
     depends_on:
       - db
-      - mosquitto
     environment:
-      - BROKER_URL=mqtt://mosquitto:1883
+      - BROKER_URL=mqtts://verdant.francecentral-1.ts.eventgrid.azure.net
       - DATABASE_URL=postgresql://verdant:verdant2025@db:5432/verdant_db
       - ACCESS_JWT_SECRET="verdant-secret"
       - REFRESH_JWT_SECRET="another-verdant-secret"
@@ -33,15 +35,15 @@ services:
     networks:
       - dev
 
-  mosquitto:
-    image: eclipse-mosquitto:2.0.21
-    volumes:
-      - ./data/mosquitto/data:/mosquitto/data
-      - ./data/mosquitto/config/:/mosquitto/config
-    networks:
-      - dev
-    ports:
-      - 1883:1883
+  # mosquitto:
+  #   image: eclipse-mosquitto:2.0.21
+  #   volumes:
+  #     - ./data/mosquitto/data:/mosquitto/data
+  #     - ./data/mosquitto/config/:/mosquitto/config
+  #   networks:
+  #     - dev
+  #   ports:
+  #     - 1883:1883
 
   db:
     image: postgres:latest

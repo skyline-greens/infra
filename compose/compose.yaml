@@ -4,6 +4,8 @@ services:
     image: ymerzouka/verdant-frontend:latest
     ports:
       - 3000:3000
+    environment:
+      - BACKEND_URL=http://back:8000/api
     networks:
       - prod
 

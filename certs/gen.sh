@@ -1,6 +1,6 @@
 #!/bin/bash
 
-names=("pi" "mqttx" "backend")
+names=("pi" "mqttx" "backend" "pi2")
 
 if [ ! -f "$HOME/.step/certs/intermediate_ca.crt" ]; then
     step ca init --deployment-type standalone \
