@@ -5,6 +5,8 @@ controller:
   service:
     annotations:
       service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
+      service.beta.kubernetes.io/azure-dns-label-name: "${var.prod_cluster_name}"
+    loadBalancerIP: "${azurerm_public_ip.verdant-public-ip.ip_address}"
   # Required for ACME
   watchIngressWithoutClass: true
   extraArgs:

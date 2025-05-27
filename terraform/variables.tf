@@ -40,3 +40,9 @@ variable "ingress_namespace" {
     type = string
     default = "ingress"
 }
+
+variable "aks_public_ip_name" {
+    description = "name of the public ip resource for the aks cluster"
+    type = string
+    default = "aks-prod-public-ip"
+}
