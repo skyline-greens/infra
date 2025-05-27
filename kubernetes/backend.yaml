@@ -1,4 +1,4 @@
-# Backend Deployment
+# Backend Deployment with Integrated Seeding
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,7 +16,22 @@ spec:
       initContainers:
       - name: wait-for-db
         image: postgres:latest
-        command: ['sh', '-c', 'until pg_isready -h db -p 5432; do echo waiting for database; sleep 2; done;']
+        command: ['sh', '-c', 'until pg_isready -h db -p 5432; do echo "Waiting for database..."; sleep 2; done; echo "Database is ready!"']
+      - name: run-seeder
+        image: ymerzouka/verdant-seed:latest
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DATABASE_URL
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "150m"
+          limits:
+            memory: "256Mi"
+            cpu: "300m"
       containers:
       - name: backend
         image: ymerzouka/verdant-backend:latest
@@ -48,19 +63,16 @@ spec:
             secretKeyRef:
               name: app-secrets
               key: REFRESH_JWT_SECRET
-
         - name: MQTT_ID_PREFIX
           valueFrom:
             configMapKeyRef:
               name: app-config
               key: MQTT_ID_PREFIX
-
         - name: MQTT_USERNAME
           valueFrom:
             configMapKeyRef:
               name: app-config
               key: MQTT_USERNAME
-
         resources:
           requests:
             memory: "256Mi"
@@ -78,15 +90,14 @@ spec:
           httpGet:
             path: /ready
             port: 8000
-          initialDelaySeconds: 5
+          initialDelaySeconds: 5 # Consider increasing if seeding takes time and affects readiness
           periodSeconds: 5
-
 ---
 # Backend Service
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-service
+  name: backend
 spec:
   selector:
     app: backend
@@ -95,5 +106,3 @@ spec:
     port: 80
     targetPort: 8000
   type: ClusterIP
-
-

@@ -4,6 +4,8 @@ services:
     image: ymerzouka/verdant-frontend:latest
     ports:
       - 3000:3000
+    depends_on:
+      - back
     environment:
       - BACKEND_URL=http://back:8000/api
     networks:
@@ -36,17 +38,26 @@ services:
       - DATABASE_URL=postgresql://verdant:verdant2025@db:5432/verdant_db
     networks:
       - prod
-
-  mosquitto:
-    image: eclipse-mosquitto:2.0.21
-    volumes:
-      - ./data/mosquitto/data:/mosquitto/data
-      - ./data/mosquitto/config/:/mosquitto/config
-    networks:
-      - prod
+      
+  studio:
+    image: dpage/pgadmin4:2025-05-27-1
+    environment:
+      - DATABASE_URL=postgresql://verdant:verdant2025@db:5432/verdant_db
+    depends_on:
+      - db
     ports:
-      - 1883:1883
+      - 4983:4983
 
+  # mosquitto:
+  #   image: eclipse-mosquitto:2.0.21
+  #   volumes:
+  #     - ./data/mosquitto/data:/mosquitto/data
+  #     - ./data/mosquitto/config/:/mosquitto/config
+  #   networks:
+  #     - prod
+  #   ports:
+  #     - 1883:1883
+  
   db:
     image: postgres:latest
     container_name: db
