@@ -11,7 +11,7 @@ resource "azurerm_kubernetes_cluster" "verdant" {
         vm_size        = "Standard_A2_v2"
         node_count = 1
         min_count      = 1
-        max_count      = 2
+        max_count      = 3
         auto_scaling_enabled = true
     }
 
