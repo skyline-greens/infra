@@ -7,18 +7,26 @@ spec:
   rules:
   - http:
       paths:
-      # - backend:
-      #     service:
-      #       name: hello-world-service
-      #       port:
-      #         number: 80
-      #   path: /
-      #   pathType: Prefix
+      - frontend:
+          service:
+            name: frontend
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
 
       - backend:
           service:
             name: backend-service
             port:
               number: 80
-        path: /
+        path: /api
+        pathType: Prefix
+
+      - backend:
+          service:
+            name: backend-service
+            port:
+              number: 80
+        path: /socket.io
         pathType: Prefix
