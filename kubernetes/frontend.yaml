@@ -36,6 +36,13 @@ spec:
             port: 3000
           initialDelaySeconds: 5
           periodSeconds: 5
+        env:
+        - name: BACKEND_URL
+          value: "http://back:8000/api"
+        - name: ACCESS_JWT_SECRET
+          value: "verdant-secret"
+        - name: CELL_ID
+          value: ""
 
 ---
 apiVersion: v1
@@ -49,4 +56,3 @@ spec:
   - port: 3000
     targetPort: 3000
   type: ClusterIP
-
