@@ -25,13 +25,13 @@ spec:
             configMapKeyRef:
               name: app-config
               key: DATABASE_URL
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "150m"
-          limits:
-            memory: "256Mi"
-            cpu: "300m"
+        # resources:
+        #   requests:
+        #     memory: "128Mi"
+        #     cpu: "150m"
+        #   limits:
+        #     memory: "256Mi"
+        #     cpu: "300m"
       containers:
       - name: backend
         image: ymerzouka/verdant-backend:latest

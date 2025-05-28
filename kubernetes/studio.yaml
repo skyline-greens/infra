@@ -45,29 +45,13 @@ spec:
               key: PGADMIN_DEFAULT_PASSWORD
         - name: PGADMIN_LISTEN_PORT # Explicitly set, though 80 is default
           value: "80"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "1Gi" # pgAdmin can be memory intensive
-            cpu: "500m"
-        readinessProbe:
-          httpGet:
-            path: /misc/ping # pgAdmin health check endpoint
-            port: 80
-          initialDelaySeconds: 20
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 3
-        livenessProbe:
-          httpGet:
-            path: /misc/ping
-            port: 80
-          initialDelaySeconds: 60
-          periodSeconds: 20
-          timeoutSeconds: 5
-          failureThreshold: 3
+        # resources:
+        #   requests:
+        #     memory: "256Mi"
+        #     cpu: "250m"
+        #   limits:
+        #     memory: "1Gi" # pgAdmin can be memory intensive
+        #     cpu: "500m"
 ---
 apiVersion: v1
 kind: Service
@@ -82,6 +66,5 @@ spec:
   ports:
   - name: http-pgadmin
     protocol: TCP
-    port: 5000
+    port: 80
     targetPort: 80
-

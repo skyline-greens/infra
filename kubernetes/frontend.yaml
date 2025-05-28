@@ -38,11 +38,11 @@ spec:
           periodSeconds: 5
         env:
         - name: BACKEND_URL
-          value: "http://back:8000/api"
+          value: "http://backend:80/api"
         - name: ACCESS_JWT_SECRET
           value: "verdant-secret"
         - name: CELL_ID
-          value: ""
+          value: "4fbd939e-2f38-4fcc-b83c-73f0987fdf21"
 
 ---
 apiVersion: v1

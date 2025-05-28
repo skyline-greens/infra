@@ -2,31 +2,40 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: verdant-ingress
+  annotations:
+    # Nginx Ingress specific annotations for WebSocket (Socket.IO)
+    # Ensure timeouts are sufficient for long-lived connections
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600s"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600s"
+    # The following might be needed if your backend service expects requests at "/" instead of "/socket.io/"
+    # If backend-service's Socket.IO is configured to listen at the root path after Ingress stripping,
+    # you might need a rewrite. For example, if requests to /socket.io/ should go to / on the backend for Socket.IO:
+    # nginx.ingress.kubernetes.io/rewrite-target: /$2
+    # And your path would be defined like: path: /socket.io(/|$)(.*)
+    # However, if your backend-service's Socket.IO is configured to listen on the /socket.io/ path,
 spec:
   ingressClassName: external-nginx
   rules:
   - http:
       paths:
-      - frontend:
+      - path: /
+        pathType: Prefix
+        backend:
           service:
             name: frontend
             port:
               number: 80
-        path: /
+      - path: /api
         pathType: Prefix
-
-      - backend:
+        backend:
           service:
-            name: backend-service
+            name: backend
             port:
               number: 80
-        path: /api
-        pathType: Prefix
-
-      - backend:
+      - path: /socket.io/
+        pathType: ImplementationSpecific
+        backend:
           service:
-            name: backend-service
+            name: backend
             port:
               number: 80
-        path: /socket.io
-        pathType: Prefix
