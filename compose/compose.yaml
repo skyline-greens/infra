@@ -1,13 +1,24 @@
 
 services:
+  gateway:
+    image: nginx:1.27.5-alpine
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - 3000:80
+    networks:
+      - prod
+
   front:
     image: ymerzouka/verdant-frontend:latest
     ports:
-      - 3000:3000
+      - 3000
     depends_on:
       - back
     environment:
       - BACKEND_URL=http://back:8000/api
+      - ACCESS_JWT_SECRET="verdant-secret"
+      - CELL_ID=beb56e75-b158-4e33-9125-84f0c3b3d618
     networks:
       - prod
 
@@ -15,8 +26,6 @@ services:
     image: ymerzouka/verdant-backend:latest
     depends_on:
       - db
-      - mosquitto
-      - migrate
     environment:
       - BROKER_URL=mqtts://verdant.francecentral-1.ts.eventgrid.azure.net
       - DATABASE_URL=postgresql://verdant:verdant2025@db:5432/verdant_db
@@ -30,23 +39,17 @@ services:
     networks:
       - prod
 
-  migrate:
-    image: ymerzouka/verdant-backend:latest
-    depends_on:
-      - db
-    environment:
-      - DATABASE_URL=postgresql://verdant:verdant2025@db:5432/verdant_db
-    networks:
-      - prod
-      
   studio:
     image: dpage/pgadmin4:2025-05-27-1
     environment:
-      - DATABASE_URL=postgresql://verdant:verdant2025@db:5432/verdant_db
+      - PGADMIN_DEFAULT_EMAIL=verdant@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=Hello2025
     depends_on:
       - db
     ports:
-      - 4983:4983
+      - 5000:80
+    networks:
+        - prod
 
   db:
     image: postgres:latest

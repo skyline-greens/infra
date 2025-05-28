@@ -1,0 +1,20 @@
+
+services:
+  seed:
+    image: ymerzouka/verdant-seed:latest
+    environment:
+      - DATABASE_URL=postgresql://verdant:verdant2025@db:5432/verdant_db
+    depends_on:
+      - db
+
+  db:
+    image: postgres:latest
+    container_name: db
+    volumes:
+      - ./data/postgresql/:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: verdant_db
+      POSTGRES_USER: verdant
+      POSTGRES_PASSWORD: verdant2025
+    ports:
+      - "5432:5432"
