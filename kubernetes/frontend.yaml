@@ -42,7 +42,7 @@ spec:
         - name: ACCESS_JWT_SECRET
           value: "verdant-secret"
         - name: CELL_ID
-          value: "4fbd939e-2f38-4fcc-b83c-73f0987fdf21"
+          value: "03d9fe5e-16db-4d94-8054-8fc52bf3195b"
 
 ---
 apiVersion: v1

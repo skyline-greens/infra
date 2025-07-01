@@ -17,14 +17,14 @@ spec:
       - name: wait-for-db
         image: postgres:latest
         command: ['sh', '-c', 'until pg_isready -h db -p 5432; do echo "Waiting for database..."; sleep 2; done; echo "Database is ready!"']
-      - name: run-seeder
-        image: ymerzouka/verdant-seed:latest
-        env:
-        - name: DATABASE_URL
-          valueFrom:
-            configMapKeyRef:
-              name: app-config
-              key: DATABASE_URL
+      # - name: run-seeder
+      #   image: ymerzouka/verdant-seed:latest
+      #   env:
+      #   - name: DATABASE_URL
+      #     valueFrom:
+      #       configMapKeyRef:
+      #         name: app-config
+      #         key: DATABASE_URL
         # resources:
         #   requests:
         #     memory: "128Mi"
