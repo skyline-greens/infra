@@ -12,7 +12,7 @@ services:
   front:
     image: ymerzouka/verdant-frontend:latest
     ports:
-      - 3000
+      - 3001:3000
     depends_on:
       - back
     environment:
@@ -55,7 +55,7 @@ services:
     image: postgres:latest
     container_name: db
     volumes:
-      - ./data/postgresql/:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: verdant_db
       POSTGRES_USER: verdant
@@ -67,3 +67,5 @@ services:
     # restart: unless-stopped
 networks:
   prod:
+volumes:
+  db-data:
